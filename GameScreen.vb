@@ -11,8 +11,6 @@ Public Class GameScreen
     Private m_cSetColor = Color.DodgerBlue
     Private m_cInertColor = SystemColors.Control
 
-    Private m_rngCsp As RNGCryptoServiceProvider = New RNGCryptoServiceProvider()
-
     Private m_Board As Label()
     Private m_Tally As Label()
 
@@ -63,7 +61,7 @@ Public Class GameScreen
 
     End Function
 
-    Private Sub RollTest_ShowLines()
+    Private Sub PlayTurn()
 
         Static nLastRoll As Integer = 0
         Dim nRoll As Integer
@@ -90,22 +88,102 @@ Public Class GameScreen
             Case -1
                 Debug.WriteLine("Out of line.")
                 MyTurn.nPoints = 0
+                cmdRollDice.Text = "Start Over"
 
             Case 0
                 'keep going 
+
+                'go for quad?
+                If MyTurn.nRollNumber = 2 And CyboLines(MyTurn.nEstablishedLine).Length = 4 Then
+                    cmdRollDice.Text = "Start Over"
+                    cmdRollQuad.Visible = True
+                End If
+
+                'evaluate points
+                Select Case MyTurn.nRollNumber + 1
+                    Case 3
+                        MyTurn.nPoints = 3
+                        Debug.WriteLine("You scored {0} points!", MyTurn.nPoints)
+                    Case 4
+                        MyTurn.nPoints = 16
+                        Debug.WriteLine("You scored {0} points!", MyTurn.nPoints)
+                End Select
+
                 MyTurn.nRollNumber += 1
-
-            Case Else
-                Debug.WriteLine("Line {0}: Turn is over, you scored: {1}!", MyTurn.nEstablishedLine, MyTurn.nPoints)
-                MyTurn.nPoints = nEval
-
         End Select
 
-        SetCellColor(nRoll, m_cSetColor)
+        'SetCellColor(nRoll, m_cSetColor)
 
         'show all available lines
 
     End Sub
+
+    ' Evaluate current turn based on CyboLines map
+    ' 
+    ' Returns:
+    '     0 - Turn can continue, no points awarded yet
+    '    -1 - Turn is over, results are not in a line
+    '     n - Points this turn is awarded
+    Private Function EvalResults(ByRef theTurn As TurnInfo) As Integer
+
+        Dim nLineNum As Integer = 0
+        Dim nLineHits As Integer = 0
+        Dim nEval As Integer = 0
+
+        'init board
+        For i As Integer = 1 To m_nDiceSides
+            SetCellColor(i, m_cInertColor)
+        Next
+
+        ' see if the rolls are in the same line
+        For nLineNum = 0 To CyboLines.GetLength(0) - 1
+            Dim nHits As Integer = 0
+            For Each nNumber As Integer In CyboLines(nLineNum)
+                For nRoll As Integer = 0 To theTurn.nRollNumber
+                    If theTurn.nResults(nRoll) = nNumber Then
+                        nHits += 1
+                    End If
+                Next
+            Next
+
+            'show possible lines
+            If nHits = theTurn.nRollNumber + 1 Then
+                For Each nNumber As Integer In CyboLines(nLineNum)
+                    SetCellColor(nNumber, m_cOpenColor)
+                Next
+
+            End If
+
+            'track hit count for best line
+            If nHits > nLineHits Then
+                nLineHits = nHits
+                theTurn.nEstablishedLine = nLineNum
+            End If
+        Next
+
+        'set current roll results to blue
+        For i As Integer = 0 To theTurn.nRollNumber
+            SetCellColor(theTurn.nResults(i), m_cSetColor)
+        Next
+
+        'how we doing?
+        If nLineHits < theTurn.nRollNumber + 1 Then
+            'turn is lost
+            nEval = -1
+        Else
+            'keep going
+            nEval = 0
+        End If
+
+        Debug.WriteLine("")
+        Debug.WriteLine("RollNumber: {0}", theTurn.nRollNumber + 1)
+        Debug.WriteLine("LineHits: {0}", nLineHits)
+        Debug.WriteLine("Eval: {0}", nEval)
+
+        Return nEval
+
+    End Function
+
 
     Private Sub RollTest()
 
@@ -125,82 +203,42 @@ Public Class GameScreen
 
     End Sub
 
-    ' Evaluate current turn based on CyboLines map
-    ' 
-    ' Returns:
-    '     0 - Turn can continue, no points awarded yet
-    '    -1 - Turn is over, results are not in a line
-    '     n - Points this turn is awarded
-    Private Function EvalResults(theTurn As TurnInfo) As Integer
-        Dim nLineNum As Integer = 0
-        Dim nLineHits As Integer = 0
-        Dim nPoints As Integer = 0
-
-        ' see if the rolls are in the same line
-        For nLineNum = 0 To CyboLines.GetLength(0) - 1
-            Dim nHits As Integer = 0
-            For Each nNumber As Integer In CyboLines(nLineNum)
-                For nRoll As Integer = 0 To theTurn.nRollNumber
-                    If theTurn.nResults(nRoll) = nNumber Then
-                        nHits += 1
-                    End If
-                Next
-            Next
-
-            If nHits = theTurn.nRollNumber + 1 Then
-                Dim sSequence As String = ""
-                For Each nNumber As Integer In CyboLines(nLineNum)
-                    sSequence += (nNumber.ToString() + " ")
-                Next
-                Debug.WriteLine("Possible Line {0}: {1}", nLineNum + 1, sSequence)
-
-                If nHits > nLineHits Then
-                    nLineHits = nHits
-                    theTurn.nEstablishedLine = nLineNum
-                End If
-            End If
-        Next
-
-        ' evaluate points
-        Select Case theTurn.nRollNumber
-            Case 0, 1
-                nPoints = 0
-            Case 2
-                nPoints = 3
-            Case 3
-                nPoints = 16
-        End Select
-
-        Return nPoints
-
-    End Function
-
-
-    ' This method simulates a roll of the dice. The input parameter is the
-    ' number of sides of the dice.
     Private Function RollDice(nDiceSides As Integer) As Integer
+        'Dim nNums As Integer() = {1, 2, 3, 4}
         Static oRandom As New Random(Now.Millisecond)
         Return oRandom.Next(1, nDiceSides + 1)
+        'Return nNums(MyTurn.nRollNumber)
     End Function
 
-    ' This method simulates a roll of the dice. The input parameter is the
-    ' number of sides of the dice.
-    Private Function RollDice(ByVal numberSides As UInt16) As UInt16
+    Private Function RollDice_rngCsp(numberSides As UInt16) As UInt16
+        Dim rngCsp As RNGCryptoServiceProvider = New RNGCryptoServiceProvider()
         Dim randomBytes As Byte() = New Byte(1) {}
-        m_rngCsp.GetBytes(randomBytes)
+        rngCsp.GetBytes(randomBytes)
         Return CUShort((BitConverter.ToUInt16(randomBytes, 0) Mod numberSides) + 1)
     End Function
 
     Private Sub cmdRollDice_Click(sender As Object, e As EventArgs) Handles cmdRollDice.Click
-        RollTest_ShowLines()
+        If cmdRollDice.Text = "Start Over" Then
+            ClearTurn()
+            cmdRollDice.Text = "Roll Dice"
+        Else
+            PlayTurn()
+        End If
         'Timer1.Enabled = Not Timer1.Enabled
     End Sub
 
 
-    Private Sub ClearTurn()
+    Private Sub ClearBoard()
         For i As Integer = 1 To m_nDiceSides
             SetCellColor(i, m_cOpenColor)
         Next
+    End Sub
+
+    Private Sub ClearTurn()
+
+        ClearBoard()
+
+        cmdRollQuad.Visible = False
 
         MyTurn.nEstablishedLine = -1
         MyTurn.nPoints = 0
@@ -208,6 +246,7 @@ Public Class GameScreen
         For i As Integer = 0 To m_nRollsPerTurn - 1
             MyTurn.nResults(i) = 0
         Next
+
     End Sub
 
     Private Sub SetCellColor(nCellNumber As Integer, nTargetColor As Color)
@@ -218,7 +257,10 @@ Public Class GameScreen
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         RollTest()
-        RollTest_ShowLines()
     End Sub
 
+    Private Sub cmdRollQuad_Click(sender As Object, e As EventArgs) Handles cmdRollQuad.Click
+        PlayTurn()
+        cmdRollQuad.Visible = False
+    End Sub
 End Class

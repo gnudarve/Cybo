@@ -49,6 +49,7 @@ Partial Class GameScreen
         Me.Tally11 = New System.Windows.Forms.Label()
         Me.Tally10 = New System.Windows.Forms.Label()
         Me.Tally9 = New System.Windows.Forms.Label()
+        Me.cmdRollQuad = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'Label1
@@ -330,11 +331,23 @@ Partial Class GameScreen
         Me.Tally9.Text = "0"
         Me.Tally9.Visible = False
         '
+        'cmdRollQuad
+        '
+        Me.cmdRollQuad.Font = New System.Drawing.Font("Arial Rounded MT Bold", 24.0!)
+        Me.cmdRollQuad.Location = New System.Drawing.Point(30, 95)
+        Me.cmdRollQuad.Name = "cmdRollQuad"
+        Me.cmdRollQuad.Size = New System.Drawing.Size(297, 62)
+        Me.cmdRollQuad.TabIndex = 25
+        Me.cmdRollQuad.Text = "Roll Quad"
+        Me.cmdRollQuad.UseVisualStyleBackColor = True
+        Me.cmdRollQuad.Visible = False
+        '
         'GameScreen
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(741, 455)
+        Me.Controls.Add(Me.cmdRollQuad)
         Me.Controls.Add(Me.Tally12)
         Me.Controls.Add(Me.Tally11)
         Me.Controls.Add(Me.Tally10)
@@ -395,4 +408,5 @@ Partial Class GameScreen
     Friend WithEvents Tally11 As Windows.Forms.Label
     Friend WithEvents Tally10 As Windows.Forms.Label
     Friend WithEvents Tally9 As Windows.Forms.Label
+    Friend WithEvents cmdRollQuad As Windows.Forms.Button
 End Class
