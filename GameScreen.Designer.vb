@@ -50,6 +50,7 @@ Partial Class GameScreen
         Me.Tally10 = New System.Windows.Forms.Label()
         Me.Tally9 = New System.Windows.Forms.Label()
         Me.cmdRollQuad = New System.Windows.Forms.Button()
+        Me.lblScore = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Label1
@@ -342,11 +343,22 @@ Partial Class GameScreen
         Me.cmdRollQuad.UseVisualStyleBackColor = True
         Me.cmdRollQuad.Visible = False
         '
+        'lblScore
+        '
+        Me.lblScore.AutoSize = True
+        Me.lblScore.Font = New System.Drawing.Font("Arial Rounded MT Bold", 24.0!)
+        Me.lblScore.Location = New System.Drawing.Point(71, 199)
+        Me.lblScore.Name = "lblScore"
+        Me.lblScore.Size = New System.Drawing.Size(184, 46)
+        Me.lblScore.TabIndex = 26
+        Me.lblScore.Text = "Score: 0"
+        '
         'GameScreen
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(741, 455)
+        Me.Controls.Add(Me.lblScore)
         Me.Controls.Add(Me.cmdRollQuad)
         Me.Controls.Add(Me.Tally12)
         Me.Controls.Add(Me.Tally11)
@@ -409,4 +421,5 @@ Partial Class GameScreen
     Friend WithEvents Tally10 As Windows.Forms.Label
     Friend WithEvents Tally9 As Windows.Forms.Label
     Friend WithEvents cmdRollQuad As Windows.Forms.Button
+    Friend WithEvents lblScore As Windows.Forms.Label
 End Class

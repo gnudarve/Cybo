@@ -14,6 +14,8 @@ Public Class GameScreen
     Private m_Board As Label()
     Private m_Tally As Label()
 
+    Private m_Points As Integer = 0
+
     Private MyTurn As New TurnInfo With {
             .nResults = New Integer(m_nRollsPerTurn - 1) {}
         }
@@ -87,34 +89,34 @@ Public Class GameScreen
         Select Case nEval
             Case -1
                 Debug.WriteLine("Out of line.")
-                MyTurn.nPoints = 0
                 cmdRollDice.Text = "Start Over"
 
             Case 0
                 'keep going 
 
                 'go for quad?
-                If MyTurn.nRollNumber = 2 And CyboLines(MyTurn.nEstablishedLine).Length = 4 Then
+                If MyTurn.nRollNumber + 1 = 3 And CyboLines(MyTurn.nEstablishedLine).Length = 4 Then
                     cmdRollDice.Text = "Start Over"
                     cmdRollQuad.Visible = True
+                    m_Points += 3
+                    Debug.WriteLine("You scored {0} points!", m_Points)
+                Else
+                    'evaluate points
+                    Select Case MyTurn.nRollNumber + 1
+                        Case 3
+                            cmdRollDice.Text = "Start Over"
+                            m_Points += 3
+                            Debug.WriteLine("You scored {0} points!", m_Points)
+                        Case 4
+                            cmdRollDice.Text = "Start Over"
+                            m_Points += 16
+                            Debug.WriteLine("You scored {0} points!", m_Points)
+                    End Select
                 End If
 
-                'evaluate points
-                Select Case MyTurn.nRollNumber + 1
-                    Case 3
-                        MyTurn.nPoints = 3
-                        Debug.WriteLine("You scored {0} points!", MyTurn.nPoints)
-                    Case 4
-                        MyTurn.nPoints = 16
-                        Debug.WriteLine("You scored {0} points!", MyTurn.nPoints)
-                End Select
-
                 MyTurn.nRollNumber += 1
+                lblScore.Text = "Score: " + m_Points.ToString
         End Select
-
-        'SetCellColor(nRoll, m_cSetColor)
-
-        'show all available lines
 
     End Sub
 
@@ -241,7 +243,6 @@ Public Class GameScreen
         cmdRollQuad.Visible = False
 
         MyTurn.nEstablishedLine = -1
-        MyTurn.nPoints = 0
         MyTurn.nRollNumber = 0
         For i As Integer = 0 To m_nRollsPerTurn - 1
             MyTurn.nResults(i) = 0
