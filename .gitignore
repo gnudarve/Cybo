@@ -2,9 +2,7 @@
 .vs/
 
 # build results
-bin/
 obj/
-Installer/
 
 # User-specific files
 *.suo
