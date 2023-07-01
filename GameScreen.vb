@@ -228,10 +228,10 @@ Public Class GameScreen
     End Sub
 
     Private Function RollDice(nDiceSides As Integer) As Integer
-        Dim nNums As Integer() = {1, 2, 4, 3}
+        'Dim nNums As Integer() = {1, 2, 4, 3}
         Static oRandom As New Random(Now.Millisecond)
-        'Return oRandom.Next(1, nDiceSides + 1)
-        Return nNums(MyTurn.nRollNumber)
+        Return oRandom.Next(1, nDiceSides + 1)
+        'Return nNums(MyTurn.nRollNumber)
     End Function
 
     Private Function RollDice_rngCsp(numberSides As UInt16) As UInt16
