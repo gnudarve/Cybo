@@ -164,13 +164,34 @@ Public Class GameScreen
             End If
         Next
 
+
         'set current roll results to blue
         For i As Integer = 0 To theTurn.nRollNumber
             SetCellColor(theTurn.nResults(i), m_cSetColor)
         Next
 
+        'confirm hits are adjacent
+        ' for lines with 3 blocks they are always going to be adjacent
+        ' but for the lines with 4 blocks we can simply verify that either the head or the tail is empty
+        Dim bNotAdjacent As Boolean = False
+        Dim bHeadHit As Boolean = False
+        Dim bTailHit As Boolean = False
+        If CyboLines(theTurn.nEstablishedLine).Length = 4 And theTurn.nRollNumber = 2 Then
+            For i As Integer = 0 To theTurn.nRollNumber
+                If theTurn.nResults(i) = CyboLines(theTurn.nEstablishedLine)(0) Then
+                    bHeadHit = True
+                End If
+                If theTurn.nResults(i) = CyboLines(theTurn.nEstablishedLine)(3) Then
+                    bTailHit = True
+                End If
+            Next
+        End If
+        If bHeadHit And bTailHit Then
+            bNotAdjacent = True
+        End If
+
         'how we doing?
-        If nLineHits < theTurn.nRollNumber + 1 Then
+        If nLineHits < theTurn.nRollNumber + 1 Or bNotAdjacent Then
             'turn is lost
             nEval = -1
         Else
@@ -207,10 +228,10 @@ Public Class GameScreen
     End Sub
 
     Private Function RollDice(nDiceSides As Integer) As Integer
-        'Dim nNums As Integer() = {1, 2, 3, 4}
+        Dim nNums As Integer() = {1, 2, 4, 3}
         Static oRandom As New Random(Now.Millisecond)
-        Return oRandom.Next(1, nDiceSides + 1)
-        'Return nNums(MyTurn.nRollNumber)
+        'Return oRandom.Next(1, nDiceSides + 1)
+        Return nNums(MyTurn.nRollNumber)
     End Function
 
     Private Function RollDice_rngCsp(numberSides As UInt16) As UInt16
