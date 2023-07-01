@@ -70,9 +70,9 @@ Public Class GameScreen
         Dim nEval As Integer
 
         'roll dice
-        Do
-            nRoll = RollDice(m_nDiceSides)
-        Loop While nRoll = nLastRoll
+        'Do
+        nRoll = RollDice(m_nDiceSides)
+        'Loop While nRoll = nLastRoll
         nLastRoll = nRoll
 
         MyTurn.nResults(MyTurn.nRollNumber) = nRoll
@@ -80,6 +80,7 @@ Public Class GameScreen
         ' check for same number hit twice
         If IsDuplicate(MyTurn) Then
             Debug.WriteLine("Duplicate number.")
+            SetCellColor(MyTurn.nResults(MyTurn.nRollNumber), Color.Blue)
             nEval = -1
         Else
             nEval = EvalResults(MyTurn)
