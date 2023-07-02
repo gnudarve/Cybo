@@ -176,7 +176,7 @@ Public Class GameScreen
         Dim bNotAdjacent As Boolean = False
         Dim bHeadHit As Boolean = False
         Dim bTailHit As Boolean = False
-        If CyboLines(theTurn.nEstablishedLine).Length = 4 And theTurn.nRollNumber = 2 Then
+        If CyboLines(theTurn.nEstablishedLine).Length = 4 And theTurn.nRollNumber < 3 Then
             For i As Integer = 0 To theTurn.nRollNumber
                 If theTurn.nResults(i) = CyboLines(theTurn.nEstablishedLine)(0) Then
                     bHeadHit = True
@@ -228,7 +228,7 @@ Public Class GameScreen
     End Sub
 
     Private Function RollDice(nDiceSides As Integer) As Integer
-        'Dim nNums As Integer() = {1, 2, 4, 3}
+        'Dim nNums As Integer() = {1, 4, 2, 3}
         Static oRandom As New Random(Now.Millisecond)
         Return oRandom.Next(1, nDiceSides + 1)
         'Return nNums(MyTurn.nRollNumber)
