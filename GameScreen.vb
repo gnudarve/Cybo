@@ -43,6 +43,8 @@ Public Class GameScreen
 
     Private Sub GameScreen_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        Me.Text += " - Version " + My.Application.Info.Version.ToString
+
         m_Board = {Label1, Label2, Label3, Label4, Label5, Label6, Label7, Label8, Label9, Label10, Label11, Label12}
         m_Tally = {Tally1, Tally2, Tally3, tally4, Tally5, tally6, Tally7, tally8, Tally9, Tally10, Tally11, Tally12}
 
@@ -65,15 +67,11 @@ Public Class GameScreen
 
     Private Sub PlayTurn()
 
-        Static nLastRoll As Integer = 0
         Dim nRoll As Integer
         Dim nEval As Integer
 
         'roll dice
-        'Do
         nRoll = RollDice(m_nDiceSides)
-        'Loop While nRoll = nLastRoll
-        nLastRoll = nRoll
 
         MyTurn.nResults(MyTurn.nRollNumber) = nRoll
 
@@ -89,7 +87,7 @@ Public Class GameScreen
 
         Select Case nEval
             Case -1
-                Debug.WriteLine("Out of line.")
+                Debug.WriteLine("Out of line or adjacency.")
                 cmdRollDice.Text = "Start Over"
 
             Case 0
@@ -125,7 +123,7 @@ Public Class GameScreen
     ' 
     ' Returns:
     '     0 - Turn can continue, no points awarded yet
-    '    -1 - Turn is over, results are not in a line
+    '    -1 - Turn is over, results are not in a line and adjacent
     '     n - Points this turn is awarded
     Private Function EvalResults(ByRef theTurn As TurnInfo) As Integer
 
@@ -138,7 +136,7 @@ Public Class GameScreen
             SetCellColor(i, m_cInertColor)
         Next
 
-        ' see if the rolls are in the same line
+        ' are the rolls are in the same line?
         For nLineNum = 0 To CyboLines.GetLength(0) - 1
             Dim nHits As Integer = 0
             For Each nNumber As Integer In CyboLines(nLineNum)
@@ -154,7 +152,6 @@ Public Class GameScreen
                 For Each nNumber As Integer In CyboLines(nLineNum)
                     SetCellColor(nNumber, m_cOpenColor)
                 Next
-
             End If
 
             'track hit count for best line
@@ -164,7 +161,6 @@ Public Class GameScreen
             End If
         Next
 
-
         'set current roll results to blue
         For i As Integer = 0 To theTurn.nRollNumber
             SetCellColor(theTurn.nResults(i), m_cSetColor)
@@ -173,7 +169,6 @@ Public Class GameScreen
         'confirm hits are adjacent
         ' for lines with 3 blocks they are always going to be adjacent
         ' but for the lines with 4 blocks we can simply verify that either the head or the tail is empty
-        Dim bNotAdjacent As Boolean = False
         Dim bHeadHit As Boolean = False
         Dim bTailHit As Boolean = False
         If CyboLines(theTurn.nEstablishedLine).Length = 4 And theTurn.nRollNumber < 3 Then
@@ -186,9 +181,7 @@ Public Class GameScreen
                 End If
             Next
         End If
-        If bHeadHit And bTailHit Then
-            bNotAdjacent = True
-        End If
+        Dim bNotAdjacent As Boolean = bHeadHit And bTailHit
 
         'how we doing?
         If nLineHits < theTurn.nRollNumber + 1 Or bNotAdjacent Then
@@ -217,9 +210,9 @@ Public Class GameScreen
         'ClearBoard()
         SetCellColor(nLastRoll, m_cInertColor)
 
-        'Do
-        nRoll = RollDice(m_nDiceSides)
-        'Loop While nRoll = nLastRoll
+        Do
+            nRoll = RollDice(m_nDiceSides)
+        Loop While nRoll = nLastRoll
         nLastRoll = nRoll
 
         SetCellColor(nRoll, m_cSetColor)
@@ -228,9 +221,9 @@ Public Class GameScreen
     End Sub
 
     Private Function RollDice(nDiceSides As Integer) As Integer
-        'Dim nNums As Integer() = {1, 4, 2, 3}
         Static oRandom As New Random(Now.Millisecond)
         Return oRandom.Next(1, nDiceSides + 1)
+        'Dim nNums As Integer() = {1, 4, 2, 3}
         'Return nNums(MyTurn.nRollNumber)
     End Function
 
@@ -238,7 +231,7 @@ Public Class GameScreen
         Dim rngCsp As RNGCryptoServiceProvider = New RNGCryptoServiceProvider()
         Dim randomBytes As Byte() = New Byte(1) {}
         rngCsp.GetBytes(randomBytes)
-        Return CUShort((BitConverter.ToUInt16(randomBytes, 0) Mod numberSides) + 1)
+        Return (BitConverter.ToUInt16(randomBytes, 0) Mod numberSides) + 1
     End Function
 
     Private Sub cmdRollDice_Click(sender As Object, e As EventArgs) Handles cmdRollDice.Click

@@ -391,7 +391,7 @@ Partial Class GameScreen
         Me.MaximizeBox = False
         Me.Name = "GameScreen"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Cybo"
+        Me.Text = "Cybo Beta"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
