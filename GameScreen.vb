@@ -1,8 +1,11 @@
-﻿Imports System.Drawing
+﻿Imports System.Data.SQLite
+Imports System.Drawing
 Imports System.Security.Cryptography
 Imports System.Windows.Forms
 
 Public Class GameScreen
+
+    Private m_sHistoryDBPath As String = Application.CommonAppDataPath + IO.Path.DirectorySeparatorChar + "history.db"
 
     Private Const m_nDiceSides As Integer = 12
     Private Const m_nRollsPerTurn As Integer = 4
@@ -12,7 +15,6 @@ Public Class GameScreen
     Private m_cInertColor = SystemColors.Control
 
     Private m_Board As Label()
-    Private m_Tally As Label()
 
     Private m_Points As Integer = 0
 
@@ -45,8 +47,10 @@ Public Class GameScreen
 
         Me.Text += " - Version " + My.Application.Info.Version.ToString
 
+        CheckDatabase()
+        DumpUsers()
+
         m_Board = {Label1, Label2, Label3, Label4, Label5, Label6, Label7, Label8, Label9, Label10, Label11, Label12}
-        m_Tally = {Tally1, Tally2, Tally3, tally4, Tally5, tally6, Tally7, tally8, Tally9, Tally10, Tally11, Tally12}
 
         ClearTurn()
 
@@ -201,25 +205,6 @@ Public Class GameScreen
 
     End Function
 
-
-    Private Sub RollTest()
-
-        Static nLastRoll As Integer = 0
-        Dim nRoll As Integer
-
-        'ClearBoard()
-        SetCellColor(nLastRoll, m_cInertColor)
-
-        Do
-            nRoll = RollDice(m_nDiceSides)
-        Loop While nRoll = nLastRoll
-        nLastRoll = nRoll
-
-        SetCellColor(nRoll, m_cSetColor)
-        m_Tally(nRoll - 1).Text = (CInt(m_Tally(nRoll - 1).Text) + 1).ToString
-
-    End Sub
-
     Private Function RollDice(nDiceSides As Integer) As Integer
         Static oRandom As New Random(Now.Millisecond)
         Return oRandom.Next(1, nDiceSides + 1)
@@ -280,4 +265,59 @@ Public Class GameScreen
         PlayTurn()
         cmdRollQuad.Visible = False
     End Sub
+
+
+    Sub CheckDatabase()
+        If Not My.Computer.FileSystem.FileExists(Application.CommonAppDataPath + IO.Path.DirectorySeparatorChar + "history.db") Then
+            'create database
+            SQLiteConnection.CreateFile(m_sHistoryDBPath)
+
+            Using connection As New SQLiteConnection("Data Source=" + m_sHistoryDBPath)
+                connection.Open()
+
+                Using command As New SQLiteCommand(connection)
+                    'create user table
+                    command.CommandText = "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT (32) NOT NULL, password TEXT (32))"
+                    command.ExecuteNonQuery()
+
+                    'insert some default users
+                    command.CommandText = "INSERT INTO users (name, password) VALUES ('Buck', '1496'), ('Miako', 'baskinn')"
+                    command.ExecuteNonQuery()
+
+                    'create scores table
+                    command.CommandText = "CREATE TABLE scores (id INTEGER PRIMARY KEY AUTOINCREMENT, user INTEGER, date TIMESTAMP, score INTEGER)"
+                    command.ExecuteNonQuery()
+
+                    'command.CommandText = "INSERT INTO scores (user, date, score) VALUES (1, '2023-07-04 17:16:23',14),(1, '2023-07-04 17:46:23',27),(2, '2023-07-04 17:26:32',16)"
+                    'command.ExecuteNonQuery()
+                End Using
+
+                connection.Close()
+            End Using
+
+        End If
+    End Sub
+
+    Sub DumpUsers()
+
+        Dim connectionString As String = "Data Source=" + Application.CommonAppDataPath + IO.Path.DirectorySeparatorChar + "history.db"
+
+        Using connection As New SQLiteConnection(connectionString)
+            connection.Open()
+
+            Dim query As String = "SELECT * FROM users"
+            Using command As New SQLiteCommand(query, connection)
+                Using reader As SQLiteDataReader = command.ExecuteReader()
+                    Console.WriteLine("Current users:")
+                    While reader.Read()
+                        Console.WriteLine("   {0}: {1} [{2}]", reader![id], reader![name], reader![password])
+                    End While
+                End Using
+            End Using
+
+            connection.Close()
+        End Using
+
+    End Sub
+
 End Class

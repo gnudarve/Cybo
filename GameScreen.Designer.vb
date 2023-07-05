@@ -38,18 +38,6 @@ Partial Class GameScreen
         Me.Label12 = New System.Windows.Forms.Label()
         Me.cmdRollDice = New System.Windows.Forms.Button()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.Tally1 = New System.Windows.Forms.Label()
-        Me.Tally2 = New System.Windows.Forms.Label()
-        Me.Tally3 = New System.Windows.Forms.Label()
-        Me.tally4 = New System.Windows.Forms.Label()
-        Me.tally8 = New System.Windows.Forms.Label()
-        Me.Tally7 = New System.Windows.Forms.Label()
-        Me.tally6 = New System.Windows.Forms.Label()
-        Me.Tally5 = New System.Windows.Forms.Label()
-        Me.Tally12 = New System.Windows.Forms.Label()
-        Me.Tally11 = New System.Windows.Forms.Label()
-        Me.Tally10 = New System.Windows.Forms.Label()
-        Me.Tally9 = New System.Windows.Forms.Label()
         Me.cmdRollQuad = New System.Windows.Forms.Button()
         Me.lblScore = New System.Windows.Forms.Label()
         Me.SuspendLayout()
@@ -214,126 +202,6 @@ Partial Class GameScreen
         Me.Timer1.Enabled = True
         Me.Timer1.Interval = 500
         '
-        'Tally1
-        '
-        Me.Tally1.AutoSize = True
-        Me.Tally1.Location = New System.Drawing.Point(369, 90)
-        Me.Tally1.Name = "Tally1"
-        Me.Tally1.Size = New System.Drawing.Size(16, 17)
-        Me.Tally1.TabIndex = 13
-        Me.Tally1.Text = "0"
-        Me.Tally1.Visible = False
-        '
-        'Tally2
-        '
-        Me.Tally2.AutoSize = True
-        Me.Tally2.Location = New System.Drawing.Point(369, 199)
-        Me.Tally2.Name = "Tally2"
-        Me.Tally2.Size = New System.Drawing.Size(16, 17)
-        Me.Tally2.TabIndex = 14
-        Me.Tally2.Text = "0"
-        Me.Tally2.Visible = False
-        '
-        'Tally3
-        '
-        Me.Tally3.AutoSize = True
-        Me.Tally3.Location = New System.Drawing.Point(369, 305)
-        Me.Tally3.Name = "Tally3"
-        Me.Tally3.Size = New System.Drawing.Size(16, 17)
-        Me.Tally3.TabIndex = 15
-        Me.Tally3.Text = "0"
-        Me.Tally3.Visible = False
-        '
-        'tally4
-        '
-        Me.tally4.AutoSize = True
-        Me.tally4.Location = New System.Drawing.Point(369, 415)
-        Me.tally4.Name = "tally4"
-        Me.tally4.Size = New System.Drawing.Size(16, 17)
-        Me.tally4.TabIndex = 16
-        Me.tally4.Text = "0"
-        Me.tally4.Visible = False
-        '
-        'tally8
-        '
-        Me.tally8.AutoSize = True
-        Me.tally8.Location = New System.Drawing.Point(490, 415)
-        Me.tally8.Name = "tally8"
-        Me.tally8.Size = New System.Drawing.Size(16, 17)
-        Me.tally8.TabIndex = 20
-        Me.tally8.Text = "0"
-        Me.tally8.Visible = False
-        '
-        'Tally7
-        '
-        Me.Tally7.AutoSize = True
-        Me.Tally7.Location = New System.Drawing.Point(490, 305)
-        Me.Tally7.Name = "Tally7"
-        Me.Tally7.Size = New System.Drawing.Size(16, 17)
-        Me.Tally7.TabIndex = 19
-        Me.Tally7.Text = "0"
-        Me.Tally7.Visible = False
-        '
-        'tally6
-        '
-        Me.tally6.AutoSize = True
-        Me.tally6.Location = New System.Drawing.Point(490, 199)
-        Me.tally6.Name = "tally6"
-        Me.tally6.Size = New System.Drawing.Size(16, 17)
-        Me.tally6.TabIndex = 18
-        Me.tally6.Text = "0"
-        Me.tally6.Visible = False
-        '
-        'Tally5
-        '
-        Me.Tally5.AutoSize = True
-        Me.Tally5.Location = New System.Drawing.Point(490, 90)
-        Me.Tally5.Name = "Tally5"
-        Me.Tally5.Size = New System.Drawing.Size(16, 17)
-        Me.Tally5.TabIndex = 17
-        Me.Tally5.Text = "0"
-        Me.Tally5.Visible = False
-        '
-        'Tally12
-        '
-        Me.Tally12.AutoSize = True
-        Me.Tally12.Location = New System.Drawing.Point(612, 415)
-        Me.Tally12.Name = "Tally12"
-        Me.Tally12.Size = New System.Drawing.Size(16, 17)
-        Me.Tally12.TabIndex = 24
-        Me.Tally12.Text = "0"
-        Me.Tally12.Visible = False
-        '
-        'Tally11
-        '
-        Me.Tally11.AutoSize = True
-        Me.Tally11.Location = New System.Drawing.Point(612, 305)
-        Me.Tally11.Name = "Tally11"
-        Me.Tally11.Size = New System.Drawing.Size(16, 17)
-        Me.Tally11.TabIndex = 23
-        Me.Tally11.Text = "0"
-        Me.Tally11.Visible = False
-        '
-        'Tally10
-        '
-        Me.Tally10.AutoSize = True
-        Me.Tally10.Location = New System.Drawing.Point(612, 199)
-        Me.Tally10.Name = "Tally10"
-        Me.Tally10.Size = New System.Drawing.Size(16, 17)
-        Me.Tally10.TabIndex = 22
-        Me.Tally10.Text = "0"
-        Me.Tally10.Visible = False
-        '
-        'Tally9
-        '
-        Me.Tally9.AutoSize = True
-        Me.Tally9.Location = New System.Drawing.Point(612, 90)
-        Me.Tally9.Name = "Tally9"
-        Me.Tally9.Size = New System.Drawing.Size(16, 17)
-        Me.Tally9.TabIndex = 21
-        Me.Tally9.Text = "0"
-        Me.Tally9.Visible = False
-        '
         'cmdRollQuad
         '
         Me.cmdRollQuad.Font = New System.Drawing.Font("Arial Rounded MT Bold", 24.0!)
@@ -362,18 +230,6 @@ Partial Class GameScreen
         Me.ClientSize = New System.Drawing.Size(741, 455)
         Me.Controls.Add(Me.lblScore)
         Me.Controls.Add(Me.cmdRollQuad)
-        Me.Controls.Add(Me.Tally12)
-        Me.Controls.Add(Me.Tally11)
-        Me.Controls.Add(Me.Tally10)
-        Me.Controls.Add(Me.Tally9)
-        Me.Controls.Add(Me.tally8)
-        Me.Controls.Add(Me.Tally7)
-        Me.Controls.Add(Me.tally6)
-        Me.Controls.Add(Me.Tally5)
-        Me.Controls.Add(Me.tally4)
-        Me.Controls.Add(Me.Tally3)
-        Me.Controls.Add(Me.Tally2)
-        Me.Controls.Add(Me.Tally1)
         Me.Controls.Add(Me.cmdRollDice)
         Me.Controls.Add(Me.Label12)
         Me.Controls.Add(Me.Label11)
@@ -411,18 +267,6 @@ Partial Class GameScreen
     Friend WithEvents Label12 As Windows.Forms.Label
     Friend WithEvents cmdRollDice As Windows.Forms.Button
     Friend WithEvents Timer1 As Windows.Forms.Timer
-    Friend WithEvents Tally1 As Windows.Forms.Label
-    Friend WithEvents Tally2 As Windows.Forms.Label
-    Friend WithEvents Tally3 As Windows.Forms.Label
-    Friend WithEvents tally4 As Windows.Forms.Label
-    Friend WithEvents tally8 As Windows.Forms.Label
-    Friend WithEvents Tally7 As Windows.Forms.Label
-    Friend WithEvents tally6 As Windows.Forms.Label
-    Friend WithEvents Tally5 As Windows.Forms.Label
-    Friend WithEvents Tally12 As Windows.Forms.Label
-    Friend WithEvents Tally11 As Windows.Forms.Label
-    Friend WithEvents Tally10 As Windows.Forms.Label
-    Friend WithEvents Tally9 As Windows.Forms.Label
     Friend WithEvents cmdRollQuad As Windows.Forms.Button
     Friend WithEvents lblScore As Windows.Forms.Label
 End Class
